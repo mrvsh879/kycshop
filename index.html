@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYC Shop - Верифицированные Аккаунты</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .site-logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .site-logo:hover {
+      transform: scale(1.1);
+    }
+
+    .site-logo i {
+      font-size: 24px;
+      color: #667eea;
+    }
+
+    .site-title {
+      font-size: 1.8rem;
+      color: white;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .search-container {
+      position: relative;
+      flex: 1;
+      max-width: 400px;
+      margin: 0 2rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 50px 12px 20px;
+      border: none;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .search-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+    }
+
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .header-icon {
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-icon:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .filter-bar {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .filter-controls {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filter-group label {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .filter-select, .sort-select {
+      padding: 8px 15px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      background: white;
+      color: #333;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-select:focus, .sort-select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .stats {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-left: auto;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      padding: 1rem 0;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .product-card:hover::before {
+      opacity: 1;
+    }
+
+    .product-top {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-top::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg); }
+    }
+
+    .logo-wrapper {
+      background: white;
+      padding: 1rem;
+      border-radius: 15px;
+      display: inline-block;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      position: relative;
+      z-index: 2;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-wrapper:hover {
+      transform: scale(1.05);
+    }
+
+    .logo-wrapper img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+
+    .product-info {
+      padding: 1.5rem;
+    }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .star {
+      color: #ffd700;
+      font-size: 16px;
+    }
+
+    .rating-text {
+      margin-left: 0.5rem;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .product-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #333;
+      text-align: center;
+    }
+
+    .product-category {
+      font-size: 0.85rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .product-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .feature-badge {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 15px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .product-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #f0f0f0;
+      background: #fafafa;
+    }
+
+    .product-price {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .product-button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.85rem;
+    }
+
+    .product-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .availability {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+    }
+
+    .availability.in-stock {
+      background: rgba(46, 204, 113, 0.1);
+      color: #27ae60;
+      border: 1px solid rgba(46, 204, 113, 0.3);
+    }
+
+    .availability.limited {
+      background: rgba(241, 196, 15, 0.1);
+      color: #f39c12;
+      border: 1px solid rgba(241, 196, 15, 0.3);
+    }
+
+    .availability.out-of-stock {
+      background: rgba(231, 76, 60, 0.1);
+      color: #e74c3c;
+      border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+    }
+
+    .no-results i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: #ddd;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .search-container {
+        order: 1;
+        margin: 0;
+        width: 100%;
+      }
+
+      .filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+      }
+
+      .stats {
+        margin-left: 0;
+        margin-top: 1rem;
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="header-left">
+        <div class="site-logo">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="site-title">KYC Shop</div>
+      </div>
+      
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Поиск аккаунтов..." id="searchInput">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+      
+      <div class="header-icons">
+        <div class="header-icon" title="Избранное">
+          <i class="fas fa-heart"></i>
+        </div>
+        <div class="header-icon" title="Профиль">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="header-icon" title="Корзина">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="filter-bar">
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label for="categoryFilter">Категория:</label>
+          <select id="categoryFilter" class="filter-select">
+            <option value="all">Все категории</option>
+            <option value="crypto">Криптоплатформы</option>
+            <option value="payment">Платежные системы</option>
+            <option value="social">Социальные сети</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="priceFilter">Цена:</label>
+          <select id="priceFilter" class="filter-select">
+            <option value="all">Любая цена</option>
+            <option value="0-30">$0 - $30</option>
+            <option value="30-50">$30 - $50</option>
+            <option value="50-100">$50 - $100</option>
+            <option value="100+">$100+</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="sortBy">Сортировка:</label>
+          <select id="sortBy" class="sort-select">
+            <option value="name">По названию</option>
+            <option value="price-low">Цена: по возрастанию</option>
+            <option value="price-high">Цена: по убыванию</option>
+            <option value="rating">По рейтингу</option>
+          </select>
+        </div>
+        
+        <div class="stats">
+          <i class="fas fa-chart-bar"></i>
+          <span id="resultsCount">Показано: 0 из 0</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="productGrid" class="product-grid">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Загрузка товаров...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Данные продуктов
+    const products = [
+      {
+        id: '1',
+        name: 'Binance Верифицированный Аккаунт',
+        category: 'crypto',
+        price: 45.00,
+        rating: 5,
+        reviews: 128,
+        logoUrl: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png?v=029',
+        features: ['KYC 2', 'Email доступ', 'API ключи'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии'
+      },
+      {
+        id: '2',
+        name: 'Gate.io Верифицированный Аккаунт',
+        category: 'crypto',
+        price: 42.00,
+        rating: 5,
+        reviews: 95,
+        logoUrl: 'https://cryptologos.cc/logos/gate-io-gateio-logo.png?v=029',
+        features: ['KYC 2', 'SMS доступ', 'Торговля'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии'
+      },
+      {
+        id: '3',
+        name: 'Bybit Верифицированный Аккаунт',
+        category: 'crypto',
+        price: 39.00,
+        rating: 4,
+        reviews: 76,
+        logoUrl: 'https://cryptologos.cc/logos/bybit-bybit-logo.png?v=029',
+        features: ['KYC 1', 'Email доступ', 'Фьючерсы'],
+        availability: 'limited',
+        availabilityText: 'Ограничено'
+      },
+      {
+        id: '4',
+        name: 'OKX Верифицированный Аккаунт',
+        category: 'crypto',
+        price: 43.00,
+        rating: 5,
+        reviews: 112,
+        logoUrl: 'https://cryptologos.cc/logos/okx-okx-logo.png?v=029',
+        features: ['KYC 2', 'Полный доступ', 'P2P торговля'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии'
+      },
+      {
+        id: '5',
+        name: 'Kraken Верифицированный Аккаунт',
+        category: 'crypto',
+        price: 55.00,
+        rating: 5,
+        reviews: 89,
+        logoUrl: 'https://cryptologos.cc/logos/kraken-kraken-logo.png?v=029',
+        features: ['KYC 3', 'Bank Wire', 'Margin Trading'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии'
+      },
+      {
+        id: '6',
+        name: 'PayPal Business Аккаунт',
+        category: 'payment',
+        price: 75.00,
+        rating: 4,
+        reviews: 156,
+        logoUrl: 'https://logos-world.net/wp-content/uploads/2020/07/PayPal-Logo.png',
+        features: ['Business', 'Верификация', 'Лимиты $10k'],
+        availability: 'limited',
+        availabilityText: 'Ограничено'
+      },
+      {
+        id: '7',
+        name: 'Stripe Connect Аккаунт',
+        category: 'payment',
+        price: 85.00,
+        rating: 5,
+        reviews: 67,
+        logoUrl: 'https://logos-world.net/wp-content/uploads/2021/03/Stripe-Logo.png',
+        features: ['Connect', 'API доступ', 'Webhooks'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии'
+      },
+      {
+        id: '8',
+        name: 'Wise Business Аккаунт',
+        category: 'payment',
+        price: 65.00,
+        rating: 4,
+        reviews: 43,
+        logoUrl: 'https://logos-world.net/wp-content/uploads/2021/03/Wise-Logo.png',
+        features: ['Multi-currency', 'IBAN', 'Карты'],
+        availability: 'in-stock',
+        availabilityText: 'В наличии'
+      }
+    ];
+
+    // Состояние приложения
+    let filteredProducts = [...products];
+    let currentFilters = {
+      search: '',
+      category: 'all',
+      price: 'all',
+      sort: 'name'
+    };
+
+    // Элементы DOM
+    const productGrid = document.getElementById('productGrid');
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const priceFilter = document.getElementById('priceFilter');
+    const sortBy = document.getElementById('sortBy');
+    const resultsCount = document.getElementById('resultsCount');
+
+    // Функция создания звезд рейтинга
+    function createStars(rating) {
+      let stars = '';
+      for (let i = 1; i <= 5; i++) {
+        stars += `<i class="fas fa-star star" style="color: ${i <= rating ? '#ffd700' : '#ddd'}"></i>`;
+      }
+      return stars;
+    }
+
+    // Функция создания карточки продукта
+    function createProductCard(product) {
+      return `
+        <div class="product-card" data-id="${product.id}">
+          <div class="availability ${product.availability}">${product.availabilityText}</div>
+          <div class="product-top">
+            <div class="logo-wrapper">
+              <img src="${product.logoUrl}" alt="${product.name}" onerror="this.style.display='none'">
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-rating">
+              ${createStars(product.rating)}
+              <span class="rating-text">(${product.reviews})</span>
+            </div>
+            <h3 class="product-title">${product.name}</h3>
+            <p class="product-category">${getCategoryName(product.category)}</p>
+            <div class="product-features">
+              ${product.features.map(feature => `<span class="feature-badge">${feature}</span>`).join('')}
+            </div>
+          </div>
+          <div class="product-bottom">
+            <span class="product-price">$${product.price.toFixed(2)}</span>
+            <button class="product-button" onclick="buyProduct('${product.id}')">
+              <i class="fas fa-shopping-cart"></i> Купить
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Функция получения названия категории
+    function getCategoryName(category) {
+      const categoryNames = {
+        crypto: 'Криптоплатформы',
+        payment: 'Платежные системы',
+        social: 'Социальные сети'
+      };
+      return categoryNames[category] || category;
+    }
+
+    // Функция фильтрации продуктов
+    function filterProducts() {
+      filteredProducts = products.filter(product => {
+        // Поиск по названию
+        const matchesSearch = product.name.toLowerCase().includes(currentFilters.search.toLowerCase());
+        
+        // Фильтр по категории
+        const matchesCategory = currentFilters.category === 'all' || product.category === currentFilters.category;
+        
+        // Фильтр по цене
+        let matchesPrice = true;
+        if (currentFilters.price !== 'all') {
+          const [min, max] = currentFilters.price.split('-').map(p => p.replace('+', ''));
+          const minPrice = parseInt(min);
+          const maxPrice = max ? parseInt(max) : Infinity;
+          matchesPrice = product.price >= minPrice && product.price <= maxPrice;
+        }
+        
+        return matchesSearch && matchesCategory && matchesPrice;
+      });
+
+      // Сортировка
+      filteredProducts.sort((a, b) => {
+        switch (currentFilters.sort) {
+          case 'price-low':
+            return a.price - b.price;
+          case 'price-high':
+            return b.price - a.price;
+          case 'rating':
+            return b.rating - a.rating;
+          case 'name':
+          default:
+            return a.name.localeCompare(b.name);
+        }
+      });
+
+      renderProducts();
+    }
+
+    // Функция отрисовки продуктов
+    function renderProducts() {
+      if (filteredProducts.length === 0) {
+        productGrid.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-search"></i>
+            <h3>Товары не найдены</h3>
+            <p>Попробуйте изменить параметры поиска</p>
+          </div>
+        `;
+      } else {
+        productGrid.innerHTML = filteredProducts.map(product => createProductCard(product)).join('');
+      }
+
+      // Обновление счетчика результатов
+      resultsCount.textContent = `Показано: ${filteredProducts.length} из ${products.length}`;
+    }
+
+    // Функция покупки продукта
+    function buyProduct(productId) {
+      const product = products.find(p => p.id === productId);
+      if (product) {
+        alert(`Товар "${product.name}" добавлен в корзину!\nЦена: $${product.price.toFixed(2)}`);
+      }
+    }
+
+    // Обработчики событий
+    searchInput.addEventListener('input', (e) => {
+      currentFilters.search = e.target.value;
+      filterProducts();
+    });
+
+    categoryFilter.addEventListener('change', (e) => {
+      currentFilters.category = e.target.value;
+      filterProducts();
+    });
+
+    priceFilter.addEventListener('change', (e) => {
+      currentFilters.price = e.target.value;
+      filterProducts();
+    });
+
+    sortBy.addEventListener('change', (e) => {
+      currentFilters.sort = e.target.value;
+      filterProducts();
+    });
+
+    // Инициализация приложения
+    function initApp() {
+      // Имитация загрузки
+      setTimeout(() => {
+        filterProducts();
+      }, 1000);
+    }
+
+    // Запуск приложения
+    document.addEventListener('DOMContentLoaded', initApp);
+
+    // Анимация при скролле
+    window.addEventListener('scroll', () => {
+      const cards = document.querySelectorAll('.product-card');
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        
+        if (isVisible) {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }
+      });
+    });
+
+    // Инициализация стилей для анимации
+    document.addEventListener('DOMContentLoaded', () => {
+      const style = document.createElement('style');
+      style.textContent = `
+        .product-card {
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+      `;
+      document.head.appendChild(style);
+    });
+  </script>
+</body>
+</html>
